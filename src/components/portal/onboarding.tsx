@@ -1,10 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { UserService } from '@/services/user-service';
 import { useAuth } from '@/components/auth-provider';
-import { User, Sparkles, ArrowRight, Palette, UserCircle, Loader2 } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { Sparkles, ArrowRight, Palette, UserCircle, Loader2 } from 'lucide-react';
 
 interface Props {
     userData: any;
@@ -12,6 +10,7 @@ interface Props {
 }
 
 export function Onboarding({ userData, onComplete }: Props) {
+    const { user } = useAuth();
     const [loading, setLoading] = useState(false);
     const [name, setName] = useState(userData?.name || userData?.username || '');
     const [color, setColor] = useState(userData?.customColor || '#f97316');
@@ -20,15 +19,23 @@ export function Onboarding({ userData, onComplete }: Props) {
         e.preventDefault();
         setLoading(true);
         try {
-            await UserService.updateProfile(userData.id, {
-                name,
-                customColor: color,
-            });
-
-            const { doc, setDoc } = await import('firebase/firestore');
+            const { doc, setDoc, serverTimestamp } = await import('firebase/firestore');
             const { db } = await import('@/lib/firebase');
+
+            // Save complete user profile, ensuring all required fields exist.
+            // This acts as a safety net if the initial creation in auth-provider failed.
             await setDoc(doc(db, 'users', userData.id), {
-                onboardingCompleted: true
+                id: userData.id,
+                email: userData.email || user?.email || '',
+                username: userData.username || user?.displayName || name,
+                name,
+                avatarUrl: userData.avatarUrl || user?.photoURL || '',
+                customColor: color,
+                roles: userData.roles || ['role_vital_member'],
+                status: userData.status || 'ACTIVE',
+                onboardingCompleted: true,
+                createdAt: userData.createdAt || serverTimestamp(),
+                lastLoginAt: serverTimestamp(),
             }, { merge: true });
 
             onComplete();
