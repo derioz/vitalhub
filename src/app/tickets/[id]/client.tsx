@@ -24,7 +24,8 @@ export function TicketClient({ id }: Props) {
 
     useEffect(() => {
         const loadTicket = async () => {
-            if (!user) return;
+            // Wait for both user and userData to be available
+            if (!user || !userData) return;
             setLoading(true);
             try {
                 const data = await TicketService.getTicket(id);
