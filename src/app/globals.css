@@ -1,8 +1,23 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Core Background Colors - Premium Dark Theme */
+  --background: #0f1115;
+  --background-card: #161b22;
+  --background-elevated: #1c2128;
+  --foreground: #e6edf3;
+  --foreground-muted: #8b949e;
+
+  /* Accent Colors */
+  --accent-primary: #3b82f6;
+  --accent-success: #22c55e;
+  --accent-warning: #f59e0b;
+  --accent-danger: #ef4444;
+
+  /* Border Colors */
+  --border-default: #30363d;
+  --border-muted: #21262d;
 }
 
 @theme inline {
@@ -10,17 +25,48 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  /* Brand Colors (keeping for backwards compat) */
+  --color-brand-start: #3b82f6;
+  --color-brand-end: #60a5fa;
+  --color-brand-dark: #1d4ed8;
+
+  /* New Semantic Tokens */
+  --color-card: var(--background-card);
+  --color-elevated: var(--background-elevated);
+  --color-muted: var(--foreground-muted);
+  --color-border: var(--border-default);
+  --color-border-muted: var(--border-muted);
+  --color-accent: var(--accent-primary);
+  --color-success: var(--accent-success);
+  --color-warning: var(--accent-warning);
+  --color-danger: var(--accent-danger);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Premium Card Styling */
+.card {
+  background: var(--background-card);
+  border: 1px solid var(--border-default);
+  border-radius: 12px;
+}
+
+/* Calendar specific styles */
+.calendar-cell {
+  transition: all 0.15s ease;
+}
+
+.calendar-cell:hover {
+  background: var(--background-elevated);
+}
+
+.calendar-event-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
 }
