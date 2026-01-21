@@ -68,7 +68,7 @@ export const UserService = {
         status?: 'ACTIVE' | 'BANNED' | 'RESTRICTED';
     }) => {
         const ref = doc(db, 'users', uid);
-        await updateDoc(ref, data);
+        await setDoc(ref, data, { merge: true });
     },
 
     getStaffMembers: async () => {

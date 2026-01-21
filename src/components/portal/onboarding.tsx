@@ -25,16 +25,16 @@ export function Onboarding({ userData, onComplete }: Props) {
                 customColor: color,
             });
 
-            const { doc, updateDoc } = await import('firebase/firestore');
+            const { doc, setDoc } = await import('firebase/firestore');
             const { db } = await import('@/lib/firebase');
-            await updateDoc(doc(db, 'users', userData.id), {
+            await setDoc(doc(db, 'users', userData.id), {
                 onboardingCompleted: true
-            });
+            }, { merge: true });
 
             onComplete();
-        } catch (err) {
+        } catch (err: any) {
             console.error(err);
-            alert('Failed to save profile');
+            alert(`Failed to save profile: ${err.message}`);
         } finally {
             setLoading(false);
         }
