@@ -56,9 +56,9 @@ export const UserService = {
      */
     updateUserRoles: async (userId: string, roleIds: string[]) => {
         const ref = doc(db, 'users', userId);
-        await updateDoc(ref, {
+        await setDoc(ref, {
             roles: roleIds
-        });
+        }, { merge: true });
     },
 
     updateProfile: async (uid: string, data: {
