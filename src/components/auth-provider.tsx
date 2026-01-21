@@ -57,7 +57,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                     // Listen to the user document
                     unsubscribeDoc = onSnapshot(userRef, (docSnap) => {
                         if (docSnap.exists()) {
-                            setUserData(docSnap.data());
+                            setUserData({ id: docSnap.id, ...docSnap.data() });
                         } else {
                             // If doc doesn't exist, create it
                             const newUserData = {
